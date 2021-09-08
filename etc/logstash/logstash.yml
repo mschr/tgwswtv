@@ -1,0 +1,20 @@
+log.level: info
+path.logs: /var/log/logstash/
+xpack.monitoring.enable: true
+pipeline.workers: 4
+pipeline.batch.size: 5
+config.reload.automatic: true
+config.reload.interval: 15s
+queue.type: persistent
+queue.max_bytes: 1024mb
+queue.max_events: 10
+# ------------ Metrics Settings --------------
+# 
+# Bind address for the metrics REST endpoint
+#
+http.host: "127.0.0.1"
+#
+# Bind port for the metrics REST endpoint, this option also accept a range
+# (9600-9700) and logstash will pick up the first available ports.
+#
+http.port: 9600-9700
