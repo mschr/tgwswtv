@@ -1,0 +1,59 @@
+version: "2.4"
+services:
+        
+  ls01:
+    container_name: ls01
+#    depends_on: 
+#      - io
+    image: docker.elastic.co/logstash/logstash:7.9.3
+#    volumes_from:
+#      - io
+    build:
+      context: .
+    ports:
+      - 127.0.0.1:9600:9600
+    environment:
+      - "LS_JAVA_OPTS=-Xms512m -Xmx768m"
+      #stack inc: LS_JAVA_OPTS=-Xss4M
+    networks:
+      netstack:
+        ipv4_address: 172.22.6.96
+    blkio_config:
+      weight: 300
+    volumes:
+     - data_logstash:/usr/share/logstash/data/
+     - ./ingest/:/ingest
+     - ./log/logstash/:/var/log/logstash/
+     - ./etc/logstash/:/etc/logstash/
+    #command: "sleep 300"
+  #io:
+  #  image: tianon/true
+    
+
+#  kibana:
+#    image: docker.elastic.co/kibana/kibana:7.9.3
+#    container_name: kibana
+#    depends_on:
+#      - es01
+#    configs:
+#      - source: kibanayml
+#          target: /usr/share/logstash/config/logstash.yml
+#          uid: '1000'
+#          gid: '1000'
+#          mode: 0640:
+#    ports:
+#      - 127.0.0.1:80:5601
+#    networks:
+#      netstack:
+#        ipv4_address: 172.22.6.56
+#
+
+networks:
+  netstack:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.22.6.0/24
+
+volumes:
+  data_logstash:
